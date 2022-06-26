@@ -14,7 +14,7 @@ public class ExternalServiceTest {
     private ExternalService externalService;
 
     @Test
-    public void createCustomerTest() throws Exception {
+    public void createExternalIdTest() throws Exception {
 
         String result = externalService.createExternalId("customer_id");
         assertNotNull(result);
