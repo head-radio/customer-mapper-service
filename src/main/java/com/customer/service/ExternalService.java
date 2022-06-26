@@ -11,6 +11,12 @@ import java.util.Random;
 @Log4j2
 public class ExternalService implements IExternalService {
 
+    /**
+     * create external id and provide it to the client
+     * @param customerId
+     * @return the external id created
+     * @throws Exception if something goes wrong
+     */
     @Override
     public String createExternalId(String customerId) throws Exception {
 

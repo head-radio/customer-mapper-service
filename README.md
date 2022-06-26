@@ -26,6 +26,7 @@ This project is a spring boot based application, written in Java 11 and spring v
 ### Principal Dependencies
 - spring-boot-starter-web 
 - spring-boot-starter-data-jpa
+- spring-boot-starter-validation
 - h2database
 - spring-boot-starter-test
 
