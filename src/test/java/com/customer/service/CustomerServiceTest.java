@@ -1,5 +1,6 @@
 package com.customer.service;
 
+import com.customer.IValidationService;
 import com.customer.exception.BadRequestException;
 import com.customer.exception.NotFoundtException;
 import com.customer.exception.UnprocessableEntityException;
@@ -13,10 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static com.customer.util.FormatUtil.BASE_DATE_FORMAT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,6 +35,9 @@ public class CustomerServiceTest {
     @Mock
     private ExternalService externalService;
 
+    @Mock
+    private IValidationService iValidationService;
+
     @Test
     public void createCustomerTest() throws Exception {
 
@@ -52,18 +53,6 @@ public class CustomerServiceTest {
         String result = customerService.createCustomer(customerRequest);
         assertNotNull(result);
         assertEquals(36, result.length());
-
-    }
-
-    @Test(expected = BadRequestException.class)
-    public void createCustomerTest_dateFormatException() throws Exception {
-
-        CustomerRequest customerRequest = new CustomerRequest();
-        customerRequest.setCustomerId("test_customer_id");
-
-        customerRequest.setCreatedAt("2022-07");
-
-        customerService.createCustomer(customerRequest);
 
     }
 
@@ -84,23 +73,6 @@ public class CustomerServiceTest {
 
     }
 
-    @Test(expected = UnprocessableEntityException.class)
-    public void createCustomerTest_externalServiceException() throws Exception {
-
-        CustomerRequest customerRequest = new CustomerRequest();
-        customerRequest.setCustomerId("test_customer_id");
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(BASE_DATE_FORMAT);
-        String date = simpleDateFormat.format(new Date());
-        customerRequest.setCreatedAt(date);
-
-
-        when(externalService.createExternalId(any())).thenThrow(new UnprocessableEntityException(""));
-
-        customerService.createCustomer(customerRequest);
-
-    }
-
     @Test
     public void getExternalIdTest() throws Exception {
 
@@ -115,6 +87,23 @@ public class CustomerServiceTest {
         String result = customerService.getExternalId(customer.getCustomerId());
         assertNotNull(result);
         assertEquals(customer.getExternalId(), result);
+
+    }
+
+    @Test(expected = UnprocessableEntityException.class)
+    public void createCustomerTest_externalServiceException() throws Exception {
+
+        CustomerRequest customerRequest = new CustomerRequest();
+        customerRequest.setCustomerId("test_customer_id");
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(BASE_DATE_FORMAT);
+        String date = simpleDateFormat.format(new Date());
+        customerRequest.setCreatedAt(date);
+
+
+        when(externalService.createExternalId(any())).thenThrow(new UnprocessableEntityException(""));
+
+        customerService.createCustomer(customerRequest);
 
     }
 

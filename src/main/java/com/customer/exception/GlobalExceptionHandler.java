@@ -3,6 +3,7 @@ package com.customer.exception;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -35,10 +36,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(handleMessageError(e), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
-    private Map<String, Object> handleMessageError(Exception e) {
+    private Map<String, Object> handleMessageError(BaseException e) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
-        body.put("message", e.getMessage());
+        if (!ObjectUtils.isEmpty(e.getMapError())) {
+            body.put("message", e.getMapError());
+        } else {
+            body.put("message", e.getMessage());
+        }
         return body;
     }
 
