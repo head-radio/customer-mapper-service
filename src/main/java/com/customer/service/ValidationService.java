@@ -29,7 +29,7 @@ public class ValidationService implements IValidationService {
         if (!violations.isEmpty()) {
             Map<String, Object> body = new LinkedHashMap<>();
             for (ConstraintViolation<Object> customerRequestConstraintViolation : violations) {
-                body.put(customerRequestConstraintViolation.getMessageTemplate(), customerRequestConstraintViolation.getMessage());
+                body.put("invalid data", customerRequestConstraintViolation.getMessage());
             }
             throw new BadRequestException("invalid input data", body);
         }
